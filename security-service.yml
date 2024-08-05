@@ -1,0 +1,33 @@
+server:
+  port: 50
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+spring:
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/develop-security-service
+    username: postgres
+    password: 100293064
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: none
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 1MB
+  messages:
+    basename: lang/message
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000

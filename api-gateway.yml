@@ -1,0 +1,128 @@
+server:
+  port: 8080
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: securityMicroservice
+          uri: lb://security-service/securityMicroService/users/gridColumns
+          predicates:
+            Path=/securityMicroService/users/gridColumns
+          filters:
+            TokenRelay=
+        - id: securityMicroservice
+          uri: lb://security-service/securityMicroService/users/formSchema
+          predicates:
+            Path=/securityMicroService/users/formSchema
+          filters:
+            TokenRelay=
+
+        - id: securityMicroservice
+          uri: lb://security-service/securityMicroService/users
+          predicates:
+            Path=/securityMicroService/users
+          filters:
+            TokenRelay=
+
+        - id: securityMicroservice
+          uri: lb://security-service/securityMicroService/user-valid-ip-list
+          predicates:
+            Path=/securityMicroService/user-valid-ip-list
+          filters:
+            TokenRelay=
+
+        - id: securityMicroService
+          uri: lb://security-service/securityMicroService/clients
+          predicates:
+            Path=/securityMicroService/clients
+          filters:
+            TokenRelay=
+
+        - id: securityMicroservice
+          uri: lb://security-service/securityMicroService/role
+          predicates:
+            Path=/securityMicroService/role
+          filters:
+            TokenRelay=
+        - id: securityMicroservice
+          uri: lb://security-service/securityMicroService/role/gridColumns
+          predicates:
+            Path=/securityMicroService/role/gridColumns
+          filters:
+            TokenRelay=
+        - id: securityMicroservice
+          uri: lb://security-service/securityMicroService/role/formSchema
+          predicates:
+            Path=/securityMicroService/role/formSchema
+          filters:
+            TokenRelay=
+        - id: securityMicroService
+          uri: lb://security-service/clientResources
+          predicates:
+            Path=/securityMicroService/clientResources
+          filters:
+            TokenRelay=
+        - id: securityMicroService
+          uri: lb://security-service/clientResources/gridColumns
+          predicates:
+            Path=/securityMicroService/clientResources/gridColumns
+          filters:
+            TokenRelay=
+        - id: securityMicroService
+          uri: lb://security-service/clientResources/formSchema
+          predicates:
+            Path=/securityMicroService/clientResources/formSchema
+          filters:
+            TokenRelay=
+
+
+        - id: microservice1
+          uri: lb://microservice1/app1/rest/messages
+          predicates:
+            Path=/app1/rest/messages
+          filters:
+            TokenRelay=
+        - id: microservice1
+          uri: lb://microservice1/app1/rest/getFromMs2
+          predicates:
+            Path=/app1/rest/getFromMs2
+          filters:
+            TokenRelay=
+        - id: microservice2
+          uri: lb://microservice2/app2/rest/messages
+          predicates:
+            Path=/app2/rest/messages
+          filters:
+            TokenRelay=
+        - id: microservice2
+          uri: lb://microservice2/app2/rest/accountDetails
+          predicates:
+            Path=/app2/rest/accountDetails
+          filters:
+            TokenRelay=
+  security:
+    oauth2:
+      client:
+        registration:
+          messaging-client-oidc:
+            provider: spring
+            client-id: api_gateway
+            client-secret: api_gateway_secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://localhost:8080/login/oauth2/code/messaging-client"
+            scope: openid
+            client-name: messaging-client-oidc
+        provider:
+          spring:
+            issuer-uri: http://localhost:9000
+

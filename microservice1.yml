@@ -1,0 +1,51 @@
+server:
+  port: 8081
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  application:
+    name: microservice1
+  security:
+    oauth2:
+      client:
+        registration:
+          messaging-client-oidc:
+            provider: spring
+            client-id: microservice1
+            client-secret: microservice1_secret
+            authorization-grant-type: client_credentials
+            redirect-uri: "http://localhost:8080/login/oauth2/code/messaging-client"
+            scope: openid
+            client-name: microservice1
+        provider:
+          spring:
+            issuer-uri: http://localhost:9000
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000
+
+  liquibase:
+    enabled: true
+    change-log: liquibase/liquibase-master.xml
+    default-schema: public
+
+    #      client:
+    #        registration:
+    #          messaging-client-oidc:
+    #            provider: spring
+    #            client-id: messaging-client
+    #            client-secret: secret
+    #            authorization-grant-type: client_credentials
+    #            scope: openid
+    #            client-name: messaging-client-oidc
+    #        provider:
+    #          spring:
+    #            issuer-uri: http://localhost:9000
